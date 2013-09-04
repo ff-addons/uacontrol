@@ -115,4 +115,3 @@ var uaEditManager = {
 		fldAction.disabled = !(aEvent.target.id == "fldActionCustom");
 	}
 };
-

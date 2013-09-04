@@ -70,12 +70,22 @@ var uaOptionsManager = {
 		getImageSrc: function(aRow, aColumn) {},
 		getProgressMode: function(aRow, aColumn) {},
 		getCellValue: function(aRow, aColumn) {},
-		cycleHeader: function(aColId, aElt) {},
-		getRowProperties: function(aRow, aProperty) {},
-		getColumnProperties: function(aColumn, aColumnElement, aProperty) {},
 
-		getCellProperties: function(aRow, aColumn, aProperty)
+//	* 6/19/2013
+//		minor fix; nsITreeView compatibility with fx 22.*
+//			https://hg.mozilla.org/mozilla-central/rev/bf88a316cf18#l17.18
+//			http://moz-addon.g.hatena.ne.jp/teramako/20130306/1362573270
+
+		cycleHeader: function(aColId) {},
+		getRowProperties: function(aRow) {},
+		getColumnProperties: function(aColumn, aColumnElement) {},
+
+		getCellProperties: function(aRow, aColumn)
 		{
+			var prop;
+			if(arguments.length == 3)
+				prop = arguments[2];
+
 			try {
 				var bBold = false;
 				var sColumn = (aColumn.id != undefined) ? aColumn.id : aColumn;
@@ -87,11 +97,19 @@ var uaOptionsManager = {
 					sValue = this.mgr.aUAActions[this.mgr.aSortKeys[aRow]].str;
 					bBold = (sValue.charAt(0) == '@' || sValue == '');
 				}
-				if (bBold)
-					aProperty.AppendElement(this.atomBold);
+				if(bBold){
+					if(prop){
+						// Fx ver < 22
+						prop.AppendElement(this.atomBold);
+					}else{
+						// Fx ver >= 22
+						return [this.atomBold].join(" ");
+					}
+				}
 			} catch (ex) {
 				uacontrolMisc.dump("getCellProperties: " + ex);
 			}
+			return "";
 		},
 
 		get selection() {
@@ -245,8 +263,7 @@ var uaOptionsManager = {
 			
 			fis.init(fp.file, 
 						0x01,	/* PR_RDONLY */
-						0444,	/* r--r--r-- (unused?) */
-						0);
+						292, false);
 			var lines = []
 			var line = {};
 			var eof;
@@ -298,7 +315,7 @@ var uaOptionsManager = {
 						0x02 |	/* PR_WRONLY */
 						0x08 | 	/* PR_CREATE_FILE */
 						0x20,	/* PR_TRUNCATE */
-						0644,	/* rw-r--r-- */
+						420,	/* rw-r--r-- */
 						0);
 			
 			/* remove first entry (@DEFAULT) and add '[UAControl]' at front */
@@ -550,4 +567,3 @@ var uaOptionsManager = {
 		);
 	}	
 };
-

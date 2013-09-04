@@ -4,8 +4,41 @@ var uaPrefs =
 	getPrefBranch: function()
 	{
 		var prefService = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
-		return prefService.getBranch("uacontrol.");
+		return prefService.getBranch("extensions.uacontrol.");
 	},
+
+	// migration prefbranch name; "uacontrol.*" to "extensions.uacontrol.*"
+	migratePrefBranch: function()
+	{
+		var prefSrv;
+		prefSrv = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
+		var newPrefBranch = this.getPrefBranch();
+		var oldPrefBranch;
+		try {
+			oldPrefBranch = prefSrv.getBranch("uacontrol.");
+		} catch(e){
+			return;
+		}
+
+		// if old pref doesn't exist, these operation will fail and throw exception
+		try {
+			var acts = oldPrefBranch.getCharPref("actions");
+			newPrefBranch.setCharPref("actions", acts);
+		} catch(e){}
+		try {
+			var bEnabled = oldPrefBranch.getBoolPref("enabled");
+			newPrefBranch.setBoolPref("enabled", bEnabled);
+		} catch(e){}
+		try {
+			newPrefBranch.setBoolPref("contextMenu",
+				oldPrefBranch.getBoolPref("contextMenu"));
+		} catch(e){}
+		try {
+			// now remove prefbranch "uacontrol.*"
+			oldPrefBranch.deleteBranch("");
+		} catch (e){}
+	},
+
 
 	onPopupShowing: function(aEvent)
 	{
@@ -76,4 +109,3 @@ var uaPrefs =
 			"enabled", 0);
 	}
 };
-

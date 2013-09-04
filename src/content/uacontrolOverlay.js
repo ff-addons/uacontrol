@@ -4,7 +4,6 @@ var uaOverlayManager = {
 	monitoredPrefs:
 	{
 		enabled: 0,
-		statusbar: 0,
 		contextMenu: 0,
 	},
 
@@ -82,14 +81,13 @@ var uaOverlayManager = {
 		this.prefBranch = uaPrefs.getPrefBranch();
 		this.prefBranch.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
 
+		if(this.prefBranch.getBoolPref("do_migrate")){
+			this.prefBranch.setBoolPref("do_migrate", false);
+			uaPrefs.migratePrefBranch();
+		}
+
 		if (this.prefBranch.getBoolPref("first_run")){
 			this.prefBranch.setBoolPref("first_run", false);
-
-			// old value of 1 (show icon in statusbar) is no longer applicable
-			try {
-				if (this.prefBranch.getIntPref('statusbar') == 1)
-					this.prefBranch.setIntPref('statusbar', 0);
-			} catch (e) { }
 
 			// add button to add-on bar if not already in a toolbar
 			var id = 'uacontrol-toolbarbutton';

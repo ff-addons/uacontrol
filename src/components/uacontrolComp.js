@@ -163,7 +163,7 @@ uaModule.prototype = {
 			
 					var prefService =
 						CC["@mozilla.org/preferences-service;1"].getService(CI.nsIPrefService);
-					this.prefBranch = prefService.getBranch("uacontrol.");
+					this.prefBranch = prefService.getBranch("extensions.uacontrol.");
 					this.prefBranch.QueryInterface(CI.nsIPrefBranchInternal);
 					this.prefBranch.addObserver("enabled", this, true);
 					this.prefBranch.addObserver("actions", this, true);
