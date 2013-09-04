@@ -39,29 +39,6 @@
 							oncommand="window.close()"/>
 				</menupopup>
 			</menu>
-			<menu id="mnuOptions" label="&options.options.label;" accesskey="&options.options.accesskey;">
-				<menupopup id="uacontrol-popupOptions" onpopupshowing="return uaPrefs.onPopupShowing(event)">
-					<menuitem type="checkbox"
-							value="enabled"
-							id="uacontrol-mnuEnabled" 
-							label="&options.enable.label;"
-							accesskey="&options.enable.accesskey;"
-							oncommand="uaPrefs.onChangeCheckboxPref(event)"/>
-					<menuseparator/>
-					<menuitem type="checkbox"
-							value="statusbar"
-							id="uacontrol-mnuStatusbar"
-							label="&options.statusbar.label;"
-							accesskey="&options.statusbar.accesskey;"
-							oncommand="uaPrefs.onChangeCheckboxPref(event)"/>
-					<menuitem type="checkbox"
-							value="contextMenu"
-							id="uacontrol-mnuContextMenu" 
-							label="&options.contextmenu.label;"
-							accesskey="&options.contextmenu.accesskey;"
-							oncommand="uaPrefs.onChangeCheckboxPref(event)"/>
-				</menupopup>
-			</menu>
 		</menubar>
 	</toolbox>
 

@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://uacontrol/skin/toolbar.css" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://uacontrol/locale/uacontrol.dtd">
+
+<overlay id="UAControlOverlay"
+		xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script type="application/x-javascript"
+		src="chrome://uacontrol/content/uacontrolOverlay.js"/>
+	<script type="application/x-javascript"
+		src="chrome://uacontrol/content/uacontrolPrefs.js"/>
+	<script type="application/x-javascript"
+		src="chrome://uacontrol/content/uacontrolMisc.js"/>
+
+	<menupopup id="menu_ToolsPopup">
+		<menuitem id="uacontrol_tools_options"
+				label="&toolsmenu.options.label;"
+				accesskey="&toolsmenu.options.accesskey;"
+				oncommand="uaOverlayManager.toolsOptions();"
+				insertbefore="prefSep"/>
+	</menupopup>
+
+	<popup id="contentAreaContextMenu">
+		<menuitem id="uacontrol_options"
+				label="&contextmenu.options.label;"
+				accesskey="&contextmenu.options.accesskey;"
+				oncommand="uaOverlayManager.contextOptions();"/>
+		<menuitem id="uacontrol_options_link"
+				hidden="true"
+				label="&contextmenu.optionslink.label;"
+				accesskey="&contextmenu.optionslink.accesskey;"
+				oncommand="uaOverlayManager.contextOptionsLink();"/>
+		<menuitem id="uacontrol_options_image"
+				hidden="true"
+				label="&contextmenu.optionsimage.label;"
+				accesskey="&contextmenu.optionsimage.accesskey;"
+				oncommand="uaOverlayManager.contextOptionsImage();"/>
+	</popup>
+
+	<popupset id="mainPopupSet">
+		<menupopup id="uacontrol-popupOptions"
+				onpopupshowing="return uaPrefs.onPopupShowing(event)">
+			<menuitem id="uacontrol-mnuEnable"
+					label="&toolsmenu.options.enable;"
+					oncommand="uaPrefs.enableUAControl()"/>
+			<menuitem id="uacontrol-mnuDisable"
+					label="&toolsmenu.options.disable;"
+					oncommand="uaPrefs.disableUAControl()"/>
+			<menuitem id="uacontrol-mnuOptions"
+					label="&toolsmenu.options.label;"
+					accesskey="&toolsmenu.options.accesskey;"
+					oncommand="uaOverlayManager.toolsOptions();"/>
+			<menuitem id="uacontrol-mnuSiteOptions"
+					label="&contextmenu.options.label;"
+					accesskey="&contextmenu.options.accesskey;"
+					oncommand="uaOverlayManager.contextOptions();"/>
+			<menuitem type="checkbox"
+					value="contextMenu"
+					id="uacontrol-mnuContextMenu" 
+					label="&options.contextmenu.label;"
+					accesskey="&options.contextmenu.accesskey;"
+					oncommand="uaPrefs.onChangeCheckboxPref(event)"/>
+		</menupopup>
+	</popupset>
+	
+	<toolbarpalette id="BrowserToolbarPalette">
+		<toolbarbutton
+				id="uacontrol-toolbarbutton"
+				class="toolbarbutton-1 chromeclass-toolbar-additional"
+				type="menu"
+				orient="horizontal"
+				popup="uacontrol-popupOptions"
+				label="&toolbarbutton.label;"
+				tooltiptext="&toolbarbutton.tooltip;" />
+	</toolbarpalette>
+
+</overlay>

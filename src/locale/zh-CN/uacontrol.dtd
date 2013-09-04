@@ -1,0 +1,51 @@
+<!ENTITY	toolsmenu.options.label					"UAControl选项…">
+<!ENTITY	toolsmenu.options.accesskey				"U">
+<!ENTITY    toolsmenu.options.enable                "启用UAControl">
+<!ENTITY    toolsmenu.options.disable               "禁用UAControl">
+
+<!ENTITY	contextmenu.options.label				"UAControl选项对于这个网站…">
+<!ENTITY	contextmenu.options.accesskey			"C">
+<!ENTITY	contextmenu.optionslink.label			"UAControl选项对于超联在这个网站…">
+<!ENTITY	contextmenu.optionslink.accesskey		"f">
+<!ENTITY	contextmenu.optionsimage.label			"UAControl选项对于图片在这个网站…">
+<!ENTITY	contextmenu.optionsimage.accesskey		"R">
+
+<!ENTITY    toolbarbutton.label                     "UAControl">
+<!ENTITY    toolbarbutton.tooltip                   "UAControl">
+
+<!ENTITY	options.title							"UAControl选项">
+<!ENTITY	options.file.label						"文件">
+<!ENTITY	options.file.accesskey					"F">
+<!ENTITY	options.import.label					"导入…">
+<!ENTITY	options.import.accesskey				"I">
+<!ENTITY	options.export.label					"出口…">
+<!ENTITY	options.export.accesskey				"E">
+<!ENTITY	options.close.label						"关闭">
+<!ENTITY	options.close.accesskey					"C">
+<!ENTITY	options.contextmenu.label				"显示上下文菜单">
+<!ENTITY	options.contextmenu.accesskey			"C">
+<!ENTITY	options.instructions.label				"对于每一个网站，你可以指定为User-Agent。">
+<!ENTITY	options.sitecolumn.label				"网站">
+<!ENTITY	options.actioncolumn.label				"行动">
+<!ENTITY	options.add.label						"新增网站">
+<!ENTITY	options.add.accesskey					"A">
+<!ENTITY	options.edit.label						"编辑网站">
+<!ENTITY	options.edit.accesskey					"E">
+<!ENTITY	options.remove.label					"移除网站">
+<!ENTITY	options.remove.accesskey				"R">
+<!ENTITY	options.removeall.label					"删除所有网站">
+<!ENTITY	options.removeall.accesskey				"l">
+<!ENTITY	options.default.label					"预设对于网站没有列出的：">
+<!ENTITY	options.editdefault.label				"编辑">
+<!ENTITY	options.editdefault.accesskey			"d">
+
+<!ENTITY	edit.title								"UAControl网站的特性">
+<!ENTITY	edit.site.label							"网站：">
+<!ENTITY	edit.site.accesskey						"S">
+<!ENTITY	edit.action.label						"行动：">
+<!ENTITY	edit.action.normal.label				"正常 - 发送实际的User-Agent">
+<!ENTITY	edit.action.normal.accesskey			"N">
+<!ENTITY	edit.action.block.label					"阻碍 - 不发送User-Agent">
+<!ENTITY	edit.action.block.accesskey				"B">
+<!ENTITY	edit.action.custom.label				"定制：">
+<!ENTITY	edit.action.custom.accesskey			"C">

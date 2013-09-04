@@ -1,0 +1,7 @@
+#uacontrol-toolbarbutton {
+  list-style-image: url("chrome://uacontrol/skin/icon_enabled.png");
+}
+
+#uacontrol-toolbarbutton[enabled="false"] {	
+  list-style-image: url("chrome://uacontrol/skin/icon_disabled.png");
+}

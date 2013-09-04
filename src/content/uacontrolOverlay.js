@@ -1,6 +1,13 @@
 
 var uaOverlayManager = {
 
+	monitoredPrefs:
+	{
+		enabled: 0,
+		statusbar: 0,
+		contextMenu: 0,
+	},
+
 	getString: function(sStringName)
 	{
 		return document.getElementById('uacontrol-strings').getString(sStringName);
@@ -68,25 +75,54 @@ var uaOverlayManager = {
 	
 	onLoad: function()
 	{
-		window.getBrowser().addProgressListener(this, 
-			Components.interfaces.nsIWebProgress.NOTIFY_LOCATION |
-			Components.interfaces.nsIWebProgress.NOTIFY_STATUS);
+		window.addEventListener("unload", this, false);
+		window.getBrowser().addProgressListener(this); 
 		document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", this, false);
 
 		this.prefBranch = uaPrefs.getPrefBranch();
 		this.prefBranch.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
-		
-		for (var sPref in 
-				{
-					enabled: 0,
-					statusbar: 0,
-					contextMenu: 0
+
+		if (this.prefBranch.getBoolPref("first_run")){
+			this.prefBranch.setBoolPref("first_run", false);
+
+			// old value of 1 (show icon in statusbar) is no longer applicable
+			try {
+				if (this.prefBranch.getIntPref('statusbar') == 1)
+					this.prefBranch.setIntPref('statusbar', 0);
+			} catch (e) { }
+
+			// add button to add-on bar if not already in a toolbar
+			var id = 'uacontrol-toolbarbutton';
+			if (!document.getElementById(id)) {
+				var toolbar = document.getElementById('addon-bar');
+				if (!toolbar)
+					toolbar = document.getElementById('nav-bar');
+				if (toolbar){
+					toolbar.insertItem(id);
+					toolbar.setAttribute("currentset", toolbar.currentSet);
+					document.persist(toolbar.id, "currentset");
+					if (toolbar.id == "addon-bar")
+						toolbar.collapsed = false;
 				}
-			)
-		{
+			}
+		}
+		
+		for (var sPref in this.monitoredPrefs){
 			this.prefBranch.addObserver(sPref, this, true);
 			this.observe(this.prefBranch, 'nsPref:changed', sPref);
 		}
+	},
+
+	onUnload: function onUnload()
+	{
+		window.removeEventListener("unload", this, false);
+
+		for (var sPref in this.monitoredPrefs)
+			this.prefBranch.removeObserver(sPref, this);
+		this.prefBranch = null;
+
+		document.getElementById("contentAreaContextMenu").removeEventListener("popupshowing", this, false);
+		window.getBrowser().removeProgressListener(this);
 	},
 
 	onPopupShowing: function(e)
@@ -121,6 +157,8 @@ var uaOverlayManager = {
 					return this.onLoad(evt);
 				case 'popupshowing':
 					return this.onPopupShowing(evt);
+				case 'unload':
+					return this.onUnload(evt);
 				default:
 					uacontrolMisc.dump("handleEvent: unknown event: " + evt.type);
 			}
@@ -132,31 +170,16 @@ var uaOverlayManager = {
 	
 	onChangeEnabled: function(oPrefBranch)
 	{
-		try {
-			this.bEnabled = oPrefBranch.getBoolPref('enabled');
-			this.updateStatusbar();
-		} catch (ex) {
-			uacontrolMisc.dump("onChangeEnabled: " + ex);
-		}
-	},
-	
-	onChangeStatusbar: function(oPrefBranch)
-	{
-		try {
-			this.showStatusbar = oPrefBranch.getBoolPref("statusbar");
-			this.updateStatusbar();
-		} catch (ex) {
-			uacontrolMisc.dump("onChangeStatusbar: " + ex);
-		}
+		this.bEnabled = oPrefBranch.getBoolPref("enabled");
+		this.updateToolbarButton();
 	},
 	
 	onChangeContextMenu: function(oPrefBranch)
 	{
-		try {
-			this.bShowContextMenu = oPrefBranch.getBoolPref('contextMenu');
-		} catch (ex) {
-			uacontrolMisc.dump("onChangeContextMenu: " + ex);
-		}
+		this.bShowContextMenu = oPrefBranch.getBoolPref('contextMenu');
+		var mcm = document.getElementById("uacontrol-mnuContextMenu");
+		if (mcm)
+			mcm.setAttribute("checked", this.bShowContextMeny ? true : false);	
 	},
 	
 	// Implement nsIObserver
@@ -171,9 +194,6 @@ var uaOverlayManager = {
 					{
 						case 'enabled':
 							this.onChangeEnabled(aSubject);
-							break;
-						case 'statusbar':
-							this.onChangeStatusbar(aSubject);
 							break;
 						case 'contextMenu':
 							this.onChangeContextMenu(aSubject);
@@ -193,44 +213,20 @@ var uaOverlayManager = {
 		}
 	},
 
-	updateStatusbar: function()
+	updateToolbarButton: function()
 	{
-		try {
-			var sb = document.getElementById("uacontrol-status");
-			if (!this.showStatusbar) {
-				sb.setAttribute("collapsed", true);
-				return;
-			}
-
-			var sbIcon = document.getElementById("uacontrol-status-icon");
-			sbIcon.src = this.bEnabled ? 
-				"chrome://uacontrol/skin/icon_enabled.png" :
-				"chrome://uacontrol/skin/icon_disabled.png";
-			sb.removeAttribute("collapsed");
-		} catch (ex) {
-			uacontrolMisc.dump("updateStatusbar: " + ex);
-		}
+		var tbb = document.getElementById("uacontrol-toolbarbutton");
+		if (tbb)
+			tbb.setAttribute("enabled", this.bEnabled ? "true" : "false");
 	},
-	
-	updateOnNextStatusChange: false,
+
 	
 	// Implement nsIWebProgressListener
-	onLocationChange: function(aWebProgress, aRequest, aLocation)
-	{
-		this.updateStatusbar();
-		this.updateOnNextStatusChange = true;
-	},
+	onLocationChange: function(aWebProgress, aRequest, aLocation) {},
 	onProgressChange: function(webProgress, request, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) {},
 	onSecurityChange: function(webProgress, request, state) {},
 	onStateChange: function(webProgress, request, stateFlags, status) {},
-	onStatusChange: function(webProgress, request, status, message)
-	{
-		if (this.updateOnNextStatusChange)
-		{
-			this.updateStatusbar();
-			this.updateOnNextStatusChange = false;
-		}
-	},
+	onStatusChange: function(webProgress, request, status, message) {},
 	// end Implement nsIWebProgressListener
 
 	// see http://forums.mozillazine.org/viewtopic.php?t=49716
@@ -241,7 +237,7 @@ var uaOverlayManager = {
 	{
 		if (aIID.equals(Components.interfaces.nsIObserver) ||
 			aIID.equals(Components.interfaces.nsIWebProgressListener) ||
-//			aIID.equals(Components.interfaces.nsIEventListener) ||
+			aIID.equals(Components.interfaces.nsIEventListener) ||
 			aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
 			aIID.equals(Components.interfaces.nsISupports))
 		{

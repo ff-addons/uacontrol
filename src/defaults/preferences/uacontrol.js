@@ -3,3 +3,4 @@ pref("uacontrol.enabled", true);
 pref("uacontrol.actions", "");
 pref("uacontrol.statusbar", true);
 pref("uacontrol.contextMenu", true);
+pref("uacontrol.first_run", true);

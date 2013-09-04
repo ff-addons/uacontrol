@@ -1,0 +1,51 @@
+<!ENTITY	toolsmenu.options.label					"UAControl選項…">
+<!ENTITY	toolsmenu.options.accesskey				"U">
+<!ENTITY    toolsmenu.options.enable                "啟用 UAControl">
+<!ENTITY    toolsmenu.options.disable               "禁用 UAControl">
+
+<!ENTITY	contextmenu.options.label				"UAControl選項對於這個網站…">
+<!ENTITY	contextmenu.options.accesskey			"C">
+<!ENTITY	contextmenu.optionslink.label			"UAControl選項對於超聯在這個網站…">
+<!ENTITY	contextmenu.optionslink.accesskey		"f">
+<!ENTITY	contextmenu.optionsimage.label			"UAControl選項對於圖片在這個網站…">
+<!ENTITY	contextmenu.optionsimage.accesskey		"R">
+
+<!ENTITY    toolbarbutton.label                     "UAControl">
+<!ENTITY    toolbarbutton.tooltip                   "UAControl">
+
+<!ENTITY	options.title							"UAControl選項">
+<!ENTITY	options.file.label						"文件">
+<!ENTITY	options.file.accesskey					"F">
+<!ENTITY	options.import.label					"導入…">
+<!ENTITY	options.import.accesskey				"I">
+<!ENTITY	options.export.label					"出口…">
+<!ENTITY	options.export.accesskey				"E">
+<!ENTITY	options.close.label						"關閉">
+<!ENTITY	options.close.accesskey					"C">
+<!ENTITY	options.contextmenu.label				"顯示上下文菜單">
+<!ENTITY	options.contextmenu.accesskey			"C">
+<!ENTITY	options.instructions.label				"對於每一個網站，你可以指定為User-Agent。">
+<!ENTITY	options.sitecolumn.label				"網站">
+<!ENTITY	options.actioncolumn.label				"行動">
+<!ENTITY	options.add.label						"新增網站">
+<!ENTITY	options.add.accesskey					"A">
+<!ENTITY	options.edit.label						"編輯網站">
+<!ENTITY	options.edit.accesskey					"E">
+<!ENTITY	options.remove.label					"移除網站">
+<!ENTITY	options.remove.accesskey				"R">
+<!ENTITY	options.removeall.label					"刪除所有網站">
+<!ENTITY	options.removeall.accesskey				"l">
+<!ENTITY	options.default.label					"預設對於網站沒有列出的：">
+<!ENTITY	options.editdefault.label				"編輯">
+<!ENTITY	options.editdefault.accesskey			"d">
+
+<!ENTITY	edit.title								"UAControl網站的特性">
+<!ENTITY	edit.site.label							"網站：">
+<!ENTITY	edit.site.accesskey						"S">
+<!ENTITY	edit.action.label						"行動：">
+<!ENTITY	edit.action.normal.label				"正常 - 發送實際的User-Agent">
+<!ENTITY	edit.action.normal.accesskey			"N">
+<!ENTITY	edit.action.block.label					"阻礙 - 不發送User-Agent">
+<!ENTITY	edit.action.block.accesskey				"B">
+<!ENTITY	edit.action.custom.label				"定制：">
+<!ENTITY	edit.action.custom.accesskey			"C">

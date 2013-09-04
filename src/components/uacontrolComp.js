@@ -72,24 +72,20 @@ uaModule.prototype = {
 
 	onModifyRequest: function(oHttpChannel)
 	{
-		try {
-			if (!this.bEnabled)
-				return;
+		if (!this.bEnabled)
+			return;
 			
-			oHttpChannel.QueryInterface(CI.nsIChannel);
+		oHttpChannel.QueryInterface(CI.nsIChannel);
 
-			// handle wildcarding
-			// try matching "www.foo.example.com", "foo.example.com", "example.com", ...
-			for (var s = oHttpChannel.URI.host; s != ""; s = s.replace(/^.*?(\.|$)/, ""))
-			{
-				if (this.adjustUA(oHttpChannel, s))
-					return;
-			}
-			// didn't find any matches, fall back on configured default action
-			this.adjustUA(oHttpChannel, '@DEFAULT');
-		} catch (ex) {
-			this.dump("onModifyRequest: " + ex);
+		// handle wildcarding
+		// try matching "www.foo.example.com", "foo.example.com", "example.com", ...
+		for (var s = oHttpChannel.URI.host; s != ""; s = s.replace(/^.*?(\.|$)/, ""))
+		{
+			if (this.adjustUA(oHttpChannel, s))
+				return;
 		}
+		// didn't find any matches, fall back on configured default action
+		this.adjustUA(oHttpChannel, '@DEFAULT');
 	},
 
 	getActionsFromBranch: function(oPrefBranch)
@@ -122,20 +118,12 @@ uaModule.prototype = {
 
 	onChangeEnabled: function(oPrefBranch)
 	{
-		try {
-			this.bEnabled = oPrefBranch.getBoolPref('enabled');
-		} catch (ex) {
-			this.dump("onChangeEnabled: " + ex);
-		}
+		this.bEnabled = oPrefBranch.getBoolPref("enabled");
 	},
 	
 	onChangeActions: function(oPrefBranch)
 	{
-		try {
-			this.aUAActions = this.getActionsFromBranch(oPrefBranch);
-		} catch (ex) {
-			this.dump("onChangeActions: " + ex);
-		}
+		this.aUAActions = this.getActionsFromBranch(oPrefBranch);
 	},
 
 
@@ -147,44 +135,42 @@ uaModule.prototype = {
 			switch (aTopic)
 			{
 				case 'http-on-modify-request':
-					var httpChannel = aSubject.QueryInterface(CI.nsIHttpChannel);
-					this.onModifyRequest(httpChannel);
-				break;
+					if (aSubject instanceof CI.nsIHttpChannel)
+						this.onModifyRequest(aSubject);
+					break;
 				
 				case 'nsPref:changed':
-					var pref = aSubject.QueryInterface(CI.nsIPrefBranch);
+					aSubject.QueryInterface(CI.nsIPrefBranch)
 					switch (aData)
 					{
 						case 'enabled':
-							this.onChangeEnabled(pref);
+							this.onChangeEnabled(aSubject);
 							break;
 						case 'actions':
-							this.onChangeActions(pref);
+							this.onChangeActions(aSubject);
 							break;
 						default:
 							this.dump("observe: unknown pref changing: " + aData);
 							break;
 					}
-				break;
+					break;
 
+				case "app-startup":
 				case "profile-after-change":
 					var obs =
 						CC["@mozilla.org/observer-service;1"].getService(CI.nsIObserverService);
-					obs.addObserver(this, "http-on-modify-request", false);
+					obs.addObserver(this, "http-on-modify-request", true);
 			
 					var prefService =
 						CC["@mozilla.org/preferences-service;1"].getService(CI.nsIPrefService);
 					this.prefBranch = prefService.getBranch("uacontrol.");
 					this.prefBranch.QueryInterface(CI.nsIPrefBranchInternal);
-					this.prefBranch.addObserver("enabled", this, false);
-					this.prefBranch.addObserver("actions", this, false);
-					try {
-						this.aUAActions = this.getActionsFromBranch(this.prefBranch);
-					} catch (ex) {
-						this.dump("init: " + ex);
-					}
+					this.prefBranch.addObserver("enabled", this, true);
+					this.prefBranch.addObserver("actions", this, true);
+					this.onChangeEnabled(this.prefBranch);
+					this.onChangeActions(this.prefBranch);
 				break;
-					
+
 				default:
 					this.dump("observe: unknown topic: " + aTopic);
 				break;

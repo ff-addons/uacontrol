@@ -6,10 +6,14 @@
 
 		<em:id>uacontrol@qz.tsugumi.org</em:id>
 		<em:name>UAControl</em:name>
-		<em:version>0.1.2.1</em:version>
+		<em:version>0.1.3</em:version>
 		<em:type>2</em:type>
-		<em:description>Control what gets sent as the User-Agent on a per-site basis.</em:description>
+		<em:description>Control "User-Agent" HTTP header, per each domain.</em:description>
 		<em:creator>KAKINUMA Ryoumei</em:creator>
+
+		<em:contributor>zh-CN Locale - Peter Kahl</em:contributor>
+		<em:contributor>zh-TW Locale - Peter Kahl</em:contributor>
+
 		<em:homepageURL>http://qz.tsugumi.org/UAControl.html</em:homepageURL>
 
 		<em:iconURL>chrome://uacontrol/skin/icon.png</em:iconURL>
@@ -18,8 +22,8 @@
 		<em:targetApplication>
 			<Description>
 				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-				<em:minVersion>3.6</em:minVersion>
-				<em:maxVersion>4.0.*</em:maxVersion>
+				<em:minVersion>4.0</em:minVersion>
+				<em:maxVersion>10.*</em:maxVersion>
 			</Description>
 		</em:targetApplication>
 
